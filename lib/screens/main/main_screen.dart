@@ -1,7 +1,7 @@
-import 'package:control_shizuya_weight_flutter/screens/activity_report/activity_report_screen.dart';
-import 'package:control_shizuya_weight_flutter/screens/support_message/support_message_screen.dart';
 import 'package:flutter/material.dart';
 import '../home/home_screen.dart';
+import '../activity_report/activity_report_screen.dart';
+import '../support_message/support_message_screen.dart';
 import '../../widgets/navigation/bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {

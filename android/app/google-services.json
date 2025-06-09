@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1098591719607",
+    "project_id": "control-shizuya-weight",
+    "storage_bucket": "control-shizuya-weight.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098591719607:android:fe6ac82353882f1ea03d32",
+        "android_client_info": {
+          "package_name": "com.example.control_shizuya_weight_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr8PrvON1LxGYYgg2qfch62byBvtiu7oQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
