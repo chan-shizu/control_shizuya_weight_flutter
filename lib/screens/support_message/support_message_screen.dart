@@ -11,6 +11,7 @@ class SupportMessageScreen extends StatefulWidget {
 }
 
 class _SupportMessageScreenState extends State<SupportMessageScreen> {
+  final _messageController = TextEditingController();
   List<SupportMessageModel> messages = [];
   late FirebaseFirestore firestore;
   late CollectionReference<Map<String, dynamic>> collection;
@@ -18,17 +19,6 @@ class _SupportMessageScreenState extends State<SupportMessageScreen> {
   @override
   void initState() {
     super.initState();
-    // _subscription = FirebaseFirestore.instance
-    //     .collection('support_messages')
-    //     .orderBy('created_at', descending: true)
-    //     .snapshots()
-    //     .listen((snapshot) {
-    //   setState(() {
-    //     messages = snapshot.docs
-    //         .map((doc) => SupportMessageModel.fromFirestore(doc))
-    //         .toList();
-    //   });
-    // });
 
     firestore = FirebaseFirestore.instance;
     collection = firestore.collection('support_message');
@@ -41,14 +31,38 @@ class _SupportMessageScreenState extends State<SupportMessageScreen> {
     collection.snapshots().listen((event) {
       if (mounted) {
         setState(() {
-          messages = event.docs.reversed
+          messages = event.docs
               .map(
                 (document) => SupportMessageModel.fromFirestore(document),
               )
-              .toList(growable: false);
+              .toList(growable: false)
+            ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
         });
       }
     });
+  }
+
+  // firestoreにメッセージを追加
+  Future<void> addMessage(String messageText) async {
+    try {
+      final message = SupportMessageModel(
+        id: '', // Firestoreが自動生成
+        message: messageText,
+        createdAt: DateTime.now(),
+      );
+
+      await collection.add(message.toFirestore());
+      _messageController.clear();
+      Navigator.pop(context);
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('メッセージの送信に失敗しました'),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -107,10 +121,38 @@ class _SupportMessageScreenState extends State<SupportMessageScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const SupportMessageScreen()));
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      decoration: const InputDecoration(
+                        hintText: 'メッセージを入力してください',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: 5,
+                      controller: _messageController,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await addMessage(_messageController.text);
+                      },
+                      child: const Text('送信'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
         },
         child: SizedBox(width: 60, height: 60, child: const Icon(Icons.add)),
         shape: const CircleBorder(),
