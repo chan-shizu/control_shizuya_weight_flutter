@@ -1,29 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SupportMessageModel {
+class ActivityReportModel {
   final String id;
-  final String message;
+  final String activity;
   final DateTime createdAt;
 
-  SupportMessageModel({
+  ActivityReportModel({
     required this.id,
-    required this.message,
+    required this.activity,
     required this.createdAt,
   });
 
-  factory SupportMessageModel.fromFirestore(DocumentSnapshot doc) {
+  factory ActivityReportModel.fromFirestore(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return SupportMessageModel(
+    return ActivityReportModel(
       id: doc.id,
-      message: data['message'] as String,
+      activity: data['activity'] as String,
       createdAt: (data['created_at'] as Timestamp).toDate(),
     );
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      'message': message,
-      'created_at': Timestamp.fromDate(createdAt),
+      'activity': activity,
+      'created_at': createdAt,
     };
   }
 }
