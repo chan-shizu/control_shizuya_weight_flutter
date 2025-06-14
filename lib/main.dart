@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '体重管理アプリ',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: const Color(0xFF4CAF50),
         useMaterial3: true,
       ),
       home: const MainScreen(),
