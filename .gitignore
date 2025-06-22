@@ -97,3 +97,6 @@ coverage/
 *.iml
 *.iws
 .DS_Store
+
+# Firebase
+firebase.json
